@@ -5,6 +5,8 @@ ENV MONGO_DB_USERNAME=admin \
 
 RUN mkdir -p /home/app
 
+RUN mkdir -p /tmp/demologs/
+
 COPY . /home/app
 
 WORKDIR /home/app
