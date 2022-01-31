@@ -1,0 +1,18 @@
+- hosts: 192.168.50.5
+  tasks:
+  - name: get container status
+    shell:  docker ps --format '{{ '{{' }}.Names{{ '}}' }}'
+    register: result
+    
+  - name: stop and remove the container if already present
+    docker_container:
+      name: mynodeapp
+      state: stopped
+    docker_container:
+      name: mynodeapp
+      state: absent
+    when: result.stdout != ""
+
+  - name: No container found check
+    debug: msg='NO container found... nothing to do.. continuing'
+    when: result.stdout == ""
