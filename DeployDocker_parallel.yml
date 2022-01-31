@@ -1,0 +1,64 @@
+---
+- hosts: localhost
+  gather_facts: no
+  tasks:
+    - add_host:
+        name: "{{ip}}"
+        ansible_ssh_user: vagrant
+        ansible_ssh_pass: vagrant
+        groups: [client]
+#    - name: Pausing to allow host sync 
+#      pause: 
+#        minutes: 1
+
+- hosts: localhost
+  gather_facts: no
+  tasks:
+   - name: starting block
+     block:
+       - name: wait for host to be up
+         local_action:
+           module: wait_for
+             host={{ip}}
+             port=22
+             delay=1
+             timeout=10       
+     rescue:
+       - debug: msg='Host unreachable, playbook may be stopped!!!....'
+
+- hosts: "{{ip}}"
+  tasks:
+  - name: install pip
+    apt:
+      state: latest
+      name: python-pip
+    become: yes
+  - name: install py docker
+    pip:
+      name:
+        - docker
+        - requests>=2.20.1
+  - name: start docker
+    service:
+      name: docker
+      state: started
+    become: true
+
+
+- hosts: "{{ip}}"
+  tasks:
+  - name: login to dockerhub
+    docker_login:
+      username: mayupdocker
+      password: mayuresh11
+      email: vicky.pardeshi@gmail.com
+  - name: Pausing before running docker
+    pause: 
+      minutes: 1
+  - name: pull image and start container
+    become: true
+    become_user: vagrant
+    docker_container:
+      name: mynodeapp
+      image: mayupdocker/nodeapp:{{tag}}
+      published_ports: 8080:3000
