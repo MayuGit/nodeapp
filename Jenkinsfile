@@ -1,6 +1,6 @@
 pipeline{
      environment {
-        registry = "mayupdocker/mynginx"
+        registry = "mayupdocker/ndoeapp"
         registryCredential = 'dockerhub'
         dockerImage = ''
     }
