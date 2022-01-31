@@ -1,0 +1,31 @@
+- hosts: win
+  gather_facts: no
+  tasks:
+    - name: create a folder in temp
+      win_file:
+        path: D:\temp\autovagrant\vagrant{{ip}}
+        state: directory
+
+    - name: copy vagrant template 
+      win_copy:
+        src: /var/jenkins_home/workspace/parallel_VM/Vagrantfile
+        dest: D:\temp\autovagrant\vagrant{{ip}}\Vagrantfile
+
+    - name: add ip address from private_network
+      win_lineinfile:
+        path: D:\temp\autovagrant\vagrant{{ip}}\Vagrantfile
+        backrefs: yes
+        regexp: '((.*)ip:)'
+        line: '$1 "{{ip}}"'
+
+    - name: add hostname
+      win_lineinfile:
+        path: D:\temp\autovagrant\vagrant{{ip}}\Vagrantfile
+        backrefs: yes
+        regexp: '((.*)hostname = )'
+        line: '$1"newhostname{{ip}}"'
+
+    - name: vagrant up
+      win_command: vagrant up
+      args:
+        chdir: D:\temp\autovagrant\vagrant{{ip}}
