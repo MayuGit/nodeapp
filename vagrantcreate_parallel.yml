@@ -8,7 +8,7 @@
 
     - name: copy vagrant template 
       win_copy:
-        src: /var/jenkins_home/workspace/parallel_VM/Vagrantfile
+        src: /var/jenkins_home/workspace/DEMO-nodeapp-parallel-vms/Vagrantfile
         dest: D:\temp\autovagrant\vagrant{{ip}}\Vagrantfile
 
     - name: add ip address from private_network
