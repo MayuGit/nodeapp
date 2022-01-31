@@ -14,5 +14,5 @@
   - name: start container
     docker_container:
       name: mynginxcontainer
-      image: mayupdocker/mynginx:{{ tag }}
+      image: mayupdocker/nodeapp:{{ tag }}
       published_ports: 8080:80
