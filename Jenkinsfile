@@ -11,7 +11,7 @@ pipeline{
     stages{
         stage('App Checkout'){
             steps{
-                git branch: 'main', url: 'https://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@github.com/MayuGit/nodeapp.git'
+                git branch: 'master', url: 'https://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@github.com/MayuGit/nodeapp.git'
             }
         }
         
