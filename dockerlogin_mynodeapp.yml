@@ -1,0 +1,18 @@
+- hosts: 192.168.50.5
+  tasks:
+  - name: login to dockerhub
+    docker_login:
+      username: mayupdocker
+      password: mayuresh11
+      email: vicky.pardeshi@gmail.com
+
+  #- name: pull image from dockerhub
+  #  docker_image:
+  #    name: mayupdocker/mynodeapp
+  #    tag: {{ tag }}
+
+  - name: start container
+    docker_container:
+      name: mynginxcontainer
+      image: mayupdocker/mynginx:{{ tag }}
+      published_ports: 8080:80
