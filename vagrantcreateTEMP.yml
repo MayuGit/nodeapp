@@ -1,0 +1,31 @@
+- hosts: win
+  gather_facts: no
+  tasks:
+    - name: create a folder in temp
+      win_file:
+        path: D:\temp\autovagrant\vagrant{{tag}}
+        state: directory
+
+    - name: copy vagrant template 
+      win_copy:
+        src: /var/jenkins_home/workspace/ansible_provisionVM/Vagrantfile
+        dest: D:\temp\autovagrant\vagrant{{tag}}\Vagrantfile      
+
+    - name: add ip address from private_network
+      win_lineinfile:
+        path: D:\temp\autovagrant\vagrant{{tag}}\Vagrantfile
+        backrefs: yes
+        regexp: '((.*)ip:)'
+        line: '$1 "192.168.50.{{tag}}"'
+
+    - name: add hostname
+      win_lineinfile:
+        path: D:\temp\autovagrant\vagrant{{tag}}\Vagrantfile
+        backrefs: yes
+        regexp: '((.*)hostname = )'
+        line: '$1"newhostname{{tag}}"'
+
+    - name: vagrant up
+      win_command: vagrant up
+      args:
+        chdir: D:\temp\autovagrant\vagrant{{tag}}
